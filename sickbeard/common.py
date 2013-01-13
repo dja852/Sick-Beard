@@ -70,18 +70,20 @@ class Quality:
 
     NONE = 0
     SDTV = 1
-    SDDVD = 1<<1 # 2
-    HDTV = 1<<2 # 4
-    HDWEBDL = 1<<3 # 8
-    HDBLURAY = 1<<4 # 16
-    FULLHDBLURAY = 1<<5 # 32
+    SDTVX264 = 1<<1 # 2
+    SDDVD = 1<<2 # 4
+    HDTV = 1<<3 # 8
+    HDWEBDL = 1<<4 # 16
+    HDBLURAY = 1<<5 # 32
+    FULLHDBLURAY = 1<<6 # 64
 
     # put these bits at the other end of the spectrum, far enough out that they shouldn't interfere
     UNKNOWN = 1<<15
 
     qualityStrings = {NONE: "N/A",
                       UNKNOWN: "Unknown",
-                      SDTV: "SD TV",
+                      SDTV: "SD TV-XVID",
+		      SDTVX264: "SD TV-X264",
                       SDDVD: "SD DVD",
                       HDTV: "HD TV",
                       HDWEBDL: "720p WEB-DL",
@@ -137,8 +139,10 @@ class Quality:
 
         checkName = lambda list, func: func([re.search(x, name, re.I) for x in list])
 
-        if checkName(["(pdtv|hdtv|dsr|tvrip).(xvid|x264)"], all) and not checkName(["(720|1080)[pi]"], all):
-            return Quality.SDTV
+        if checkName(["(pdtv|hdtv|dsr|tvrip).(xvid)"], all) and not checkName(["(720|1080)[pi]"], all):
+	    return Quality.SDTV
+	elif checkName(["(pdtv|hdtv|dsr|tvrip).(x264)"], all) and not checkName(["(720|1080)[pi]"], all):
+            return Quality.SDTVX264
         elif checkName(["(dvdrip|bdrip)(.ws)?.(xvid|divx|x264)"], any) and not checkName(["(720|1080)[pi]"], all):
             return Quality.SDDVD
         elif checkName(["720p", "hdtv", "x264"], all) or checkName(["hr.ws.pdtv.x264"], any):
@@ -195,10 +199,9 @@ Quality.SNATCHED = [Quality.compositeStatus(SNATCHED, x) for x in Quality.qualit
 Quality.SNATCHED_PROPER = [Quality.compositeStatus(SNATCHED_PROPER, x) for x in Quality.qualityStrings.keys()]
 
 HD = Quality.combineQualities([Quality.HDTV, Quality.HDWEBDL, Quality.HDBLURAY], [])
-SD = Quality.combineQualities([Quality.SDTV, Quality.SDDVD], [])
-ANY = Quality.combineQualities([Quality.SDTV, Quality.SDDVD, Quality.HDTV, Quality.HDWEBDL, Quality.HDBLURAY, Quality.UNKNOWN], [])
-BEST = Quality.combineQualities([Quality.SDTV, Quality.HDTV, Quality.HDWEBDL], [Quality.HDTV])
-
+SD = Quality.combineQualities([Quality.SDTV, Quality.SDTVX264, Quality.SDDVD], [])
+ANY = Quality.combineQualities([Quality.SDTV, Quality.SDTVX264, Quality.SDDVD, Quality.HDTV, Quality.HDWEBDL, Quality.HDBLURAY, Quality.UNKNOWN], [])
+BEST = Quality.combineQualities([Quality.SDTV, Quality.SDTVX264,  Quality.HDTV, Quality.HDWEBDL], [Quality.HDTV])
 qualityPresets = (SD, HD, ANY)
 qualityPresetStrings = {SD: "SD",
                         HD: "HD",

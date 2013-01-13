@@ -189,12 +189,13 @@ addList("show.setquality", "$curShow.name", "&tvdbid=$curShow.tvdbid", "quality"
 
 //build out generic quality options
 addOptGroup("quality", "Quality Templates");
-addOption("quality", "SD", "&initial=sdtv|sddvd");
+addOption("quality", "SD", "&initial=sdtv|sdtvx264|sddvd");
 addOption("quality", "HD", "&initial=hdtv|hdwebdl|hdbluray");
-addOption("quality", "ANY", "&initial=sdtv|sddvd|hdtv|hdwebdl|hdbluray|unknown");
+addOption("quality", "ANY", "&initial=sdtv|sdtvx264|sddvd|hdtv|hdwebdl|hdbluray|unknown");
 endOptGroup("quality");
 addOptGroup("quality", "Inital (Custom)");
-addList("quality", "SD TV", "&initial=sdtv", "quality-archive");
+addList("quality", "SD TV-XVID", "&initial=sdtv", "quality-archive");
+addList("quality", "SD TV-X264", "&initial=sdtvx264", "quality-archive");
 addList("quality", "SD DVD", "&initial=sddvd", "quality-archive");
 addList("quality", "HD TV", "&initial=hdtv", "quality-archive");
 addList("quality", "720p Web-DL", "&initial=hdwebdl", "quality-archive");
@@ -204,7 +205,7 @@ addList("quality", "Unknown", "&initial=unknown", "quality-archive");
 endOptGroup("quality");
 addOptGroup("quality", "Random (Custom)");
 addList("quality", "SD DVD/720p Web-DL", "&initial=sddvd|hdwebdl", "quality-archive");
-addList("quality", "SD TV/HD TV", "&initial=sdtv|hdtv", "quality-archive");
+addList("quality", "SD TV/HD TV", "&initial=sdtv|sdtvx264|hdtv", "quality-archive");
 endOptGroup("quality");
 
 addOption("quality-archive", "Optional Param", "", 1);
